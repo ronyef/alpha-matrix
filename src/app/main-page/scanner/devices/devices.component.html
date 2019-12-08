@@ -1,0 +1,12 @@
+<img src="assets/images/scanner.png" alt="scanner" width="120">
+<h3>Detected Devices</h3>
+<div *ngIf="devices; else empty">
+    <ul class="list" *ngFor="let device of devices | async">
+        <li>{{device.directory}}</li>
+    </ul>
+</div>
+<ng-template #empty>
+    <p>No device found</p>
+</ng-template>
+<br>
+<button class="btn btn-primary btn-sm" (click)="detect()">Detect</button>
