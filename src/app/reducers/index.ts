@@ -26,7 +26,14 @@ export const metaReducers: MetaReducer<State>[] = !environment.production ? [] :
 
 //device reducer
 const initialState: Device = {
-  directory: '/scanner'
+  path: '/scanner',
+  manufacturer: 'undefined',
+  serialNumber: 'undefined',
+  pnpId: 'undefined',
+  locationId: 'undefined',
+  vendorId: 'undefined',
+  productId: 'undefined',
+  isConnected: false
 }
 
 export function deviceReducer(state: Device[] = [initialState], action: DeviceActions.Actions) {

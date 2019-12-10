@@ -7,6 +7,7 @@ import { DevicesComponent } from './devices/devices.component';
 import { HelpComponent } from './help/help.component';
 import { ClarityModule } from '@clr/angular';
 import { ScannerComponent } from './scanner.component';
+import { DevicesStoreService } from 'src/app/services/devices-store.service';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { ScannerComponent } from './scanner.component';
     CommonModule,
     ClarityModule,
     ScannerRoutingModule
-  ]
+  ],
+  providers: [DevicesStoreService]
 })
 export class ScannerModule { }

@@ -5,6 +5,7 @@ module.exports = {
     detectScanner() {
         ipcMain.handle('detect-scanner', async(event, args) => {
             const result = await SerialPort.list()
+            // console.log(result)
             return result
         })
     }
