@@ -11,8 +11,10 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { AppRoutingModule } from  './app-routing.module'
 import { MainPageModule } from './main-page/main-page.module';
 import { from } from 'rxjs';
-import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './reducers';
+import { NgxsModule } from '@ngxs/store';
+import { DeviceState } from './state/device.state';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin'
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin'
 
 @NgModule({
   declarations: [
@@ -27,13 +29,11 @@ import { reducers, metaReducers } from './reducers';
     MainPageModule,
     AppRoutingModule,
     NgxElectronModule,
-    StoreModule.forRoot(reducers, {
-      metaReducers,
-      runtimeChecks: {
-        strictStateImmutability: true,
-        strictActionImmutability: true
-      }
-    })
+    NgxsModule.forRoot([
+      DeviceState
+    ]),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
+    NgxsLoggerPluginModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

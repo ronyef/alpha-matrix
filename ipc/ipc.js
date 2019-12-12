@@ -15,6 +15,7 @@ module.exports = {
     connectScanner() {
         ipcMain.handle('connect-scanner', async(event, device) => {
             connectPort(device)
+
             return true
         })
     }
