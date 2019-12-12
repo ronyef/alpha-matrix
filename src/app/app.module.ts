@@ -12,8 +12,7 @@ import { AppRoutingModule } from  './app-routing.module'
 import { MainPageModule } from './main-page/main-page.module';
 import { from } from 'rxjs';
 import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers, deviceReducer } from './reducers';
-import { reducer } from './reducers/device.reducer'
+import { reducers, metaReducers } from './reducers';
 
 @NgModule({
   declarations: [
@@ -34,9 +33,6 @@ import { reducer } from './reducers/device.reducer'
         strictStateImmutability: true,
         strictActionImmutability: true
       }
-    }),
-    StoreModule.forRoot({
-      device: deviceReducer
     })
   ],
   providers: [],

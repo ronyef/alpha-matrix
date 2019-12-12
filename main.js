@@ -60,6 +60,7 @@ app.on('activate', () => {
 const ipc = require('./ipc/ipc')
 
 ipc.detectScanner();
+ipc.connectScanner();
 
 // ipcMain.on('detect', (event, arg) => {
 //   console.log(arg)

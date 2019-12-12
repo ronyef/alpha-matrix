@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core'
 import {BehaviorSubject} from 'rxjs'
 import {shareReplay, map} from 'rxjs/operators'
 import {Device} from './../models/device.model'
-import { deviceReducer } from '../reducers'
 
 @Injectable()
 export class DevicesStoreService {
@@ -50,7 +49,7 @@ export class DevicesStoreService {
         });
 
         this.devices = tmpDevices
-        console.log(this._devices)
+        // console.log(this._devices)
     }
 
 }

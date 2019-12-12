@@ -2,8 +2,8 @@
 <img src="assets/images/scanner.png" alt="scanner" width="120">
 <p class="p2">Detected Devices:</p>
 <div *ngIf="devicesStoreService.devices$; else empty">
-    <ul class="list" *ngFor="let device of devicesStoreService.devices$ | async">
-        <li>{{device.path}}&nbsp;&nbsp;<span><button class="btn btn-sm">Connect</button></span></li>
+    <ul class="list" *ngFor="let device of devicesStoreService.devices$ | async; let i = index">
+        <li>{{device.path}}&nbsp;&nbsp;<span><button class="btn btn-sm" (click)="connect(device.path)">Connect</button></span></li>
     </ul>
 </div>
 <ng-template #empty>
