@@ -35,8 +35,5 @@ export class DeviceState {
                 dvc.isConnected = true
             }
         })
-        // patchState({
-            
-        // })
     }
 }

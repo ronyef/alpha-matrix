@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ElectronService } from 'ngx-electron'
+import { Store } from '@ngxs/store'
+import { AddProduct } from './../../../actions/product.actions'
+import { Product } from '../../../models/product.model'
+import { Observable } from 'rxjs'
 
 @Component({
   selector: 'app-scan-process',
@@ -7,9 +12,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ScanProcessComponent implements OnInit {
 
-  constructor() { }
+  products$: Observable<Product>
 
-  ngOnInit() {
+  constructor(private _electronService: ElectronService, private store: Store) { 
+    this.products$ = this.store.select(state => state.products.products)
   }
 
+  ngOnInit() {
+    this._electronService.ipcRenderer.on('qr-scanned' , (event , data) => { 
+      
+      this.storeProduct(data)
+      // let productData: Product = {
+      //   nie: data.nie,
+      //   nieExpiry: data.nieExpiry,
+      //   batch: data.batch,
+      //   productionDate: data.productionDate,
+      //   expiryDate: data.expiryDate,
+      //   serialNo: data.serialNo
+      // }
+  
+      // console.log(productData)
+    })
+  }
+
+  storeProduct = (data: Product) => {
+    this.store.dispatch(new AddProduct(data))
+  }
 }

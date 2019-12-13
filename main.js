@@ -2,6 +2,10 @@ const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const url = require('url')
 
+const SerialPort = require('serialport')
+const Readline = require('@serialport/parser-readline');
+const { getNie, getNieExpiry, getBatch, getProductionDate, getExpiryDate, getSerial } = require('./ipc/scan-parser')
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
@@ -12,7 +16,8 @@ function createWindow () {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      backgroundThrottling: false
     },
     icon: `file://${__dirname}/dist/assets/logo.png`
   })
@@ -57,13 +62,61 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-const ipc = require('./ipc/ipc')
 
-ipc.detectScanner();
-ipc.connectScanner();
+// const ipc = require('./ipc/ipc')
 
-// ipcMain.on('detect', (event, arg) => {
-//   console.log(arg)
-//   // console.log(event)
-//   // event.returnValue('udah beres')
-// })
+// ipc.detectScanner();
+// ipc.connectScanner();
+
+ipcMain.handle('detect-scanner', async(event, args) => {
+  const result = await SerialPort.list()
+  // console.log(result)
+  return result
+})
+
+ipcMain.handle('connect-scanner', async(event, device) => {
+  connectPort(device)
+
+  return true
+})
+
+// fungsi konek scanner dan scanning
+function connectPort(scanDevice) {
+  const scanner = new SerialPort(scanDevice, {baudRate: 115200})
+
+  scanner.on('error', function(err) {
+      console.log(err.message)
+  })
+
+  const parser = new Readline();
+  scanner.pipe(parser);
+
+  parser.on('data', (line) => {
+      // console.log(`> ${line}`)
+      console.log('NIE: ',getNie(line));
+      console.log('NIE Expiry: ',getNieExpiry(line));
+      console.log('Batch: ',getBatch(line));
+      console.log('Production Date: ',getProductionDate(line));
+      console.log('Expiry Date: ',getExpiryDate(line));
+      console.log('Serial No: ',getSerial(line));
+
+      const nie = getNie(line)
+      const nieExpiry = getNieExpiry(line)
+      const batch = getBatch(line)
+      const productionDate = getProductionDate(line)
+      const expiryDate = getExpiryDate(line)
+      const serialNo = getSerial(line)
+
+      const qrData = {
+          nie: nie,
+          nieExpiry: nieExpiry,
+          batch: batch,
+          productionDate: productionDate,
+          expiryDate: expiryDate,
+          serialNo: serialNo
+      }
+
+      win.webContents.send('qr-scanned', qrData)
+
+  });
+}

@@ -1,1 +1,30 @@
-<p>scan-process works!</p>
+<p class="p2">Scanned Products:</p>
+<div *ngIf="products$; else empty">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="left">NIE</th>
+                <th>NIE Expired</th>
+                <th>Batch No</th>
+                <th>Production Date</th>
+                <th>Date Expired</th>
+                <th>Serial No</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let product of products$ | async">
+                <td class="left">{{product.nie}}</td>
+                <td>{{product.nieExpiry}}</td>
+                <td>{{product.batch}}</td>
+                <td>{{product.productionDate}}</td>
+                <td>{{product.expiryDate}}</td>
+                <td>{{product.serialNo}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<ng-template #empty>
+    <p>No product scanned</p>
+</ng-template>
+<br>
+<button class="btn btn-primary btn-sm">Export Data</button>
