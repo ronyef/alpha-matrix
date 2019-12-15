@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ElectronService } from 'ngx-electron'
-import { Store } from '@ngxs/store'
+import { Store, Select } from '@ngxs/store'
 import { AddProduct } from './../../../actions/product.actions'
 import { Product } from '../../../models/product.model'
 import { Observable } from 'rxjs'
+import { Subscription } from '../../../models/subscription.model'
+import { SubscribeToEvent } from '../../../actions/subscription.actions'
 
 @Component({
   selector: 'app-scan-process',
@@ -14,28 +16,31 @@ export class ScanProcessComponent implements OnInit {
 
   products$: Observable<Product>
 
+  subscription$: Observable<Subscription>
+
+  currentPageSize: number
+
   constructor(private _electronService: ElectronService, private store: Store) { 
+
+    this.products$ = null
+
+    this.subscription$ = this.store.select(state => state.subscription.subscription)
     this.products$ = this.store.select(state => state.products.products)
+
   }
 
   ngOnInit() {
-    this._electronService.ipcRenderer.on('qr-scanned' , (event , data) => { 
-      
-      this.storeProduct(data)
-      // let productData: Product = {
-      //   nie: data.nie,
-      //   nieExpiry: data.nieExpiry,
-      //   batch: data.batch,
-      //   productionDate: data.productionDate,
-      //   expiryDate: data.expiryDate,
-      //   serialNo: data.serialNo
-      // }
-  
-      // console.log(productData)
+    this.subscription$.subscribe((sub) => {
+      if (sub.qrScanned == false) {
+        this._electronService.ipcRenderer.on('qr-scanned' , (event , data) => { 
+          this.store.dispatch(new AddProduct(data))
+        })
+
+        this.store.dispatch(new SubscribeToEvent.ToScan(true))
+        console.log('Subscribe to qr-scanned event')
+      }
     })
+    
   }
 
-  storeProduct = (data: Product) => {
-    this.store.dispatch(new AddProduct(data))
-  }
 }

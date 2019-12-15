@@ -16,6 +16,7 @@ import { DeviceState } from './state/device.state';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin'
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin'
 import { ProductState } from './state/product.state';
+import { SubscriptionState } from './state/subscription.state';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { ProductState } from './state/product.state';
     NgxElectronModule,
     NgxsModule.forRoot([
       DeviceState,
-      ProductState
+      ProductState,
+      SubscriptionState
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot()
