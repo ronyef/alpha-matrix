@@ -32,6 +32,7 @@
     "@ngxs/store": "^3.6.0",
     "@webcomponents/custom-elements": "^1.0.0",
     "electron-main-window": "^1.0.4",
+    "fast-csv": "^3.5.0",
     "glob": "^7.1.6",
     "ngx-electron": "^2.2.0",
     "object-path": "^0.11.4",

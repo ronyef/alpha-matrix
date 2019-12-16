@@ -3,9 +3,12 @@ import { ElectronService } from 'ngx-electron'
 import { Store, Select } from '@ngxs/store'
 import { AddProduct } from './../../../actions/product.actions'
 import { Product } from '../../../models/product.model'
-import { Observable } from 'rxjs'
+import { Observable, from } from 'rxjs'
 import { Subscription } from '../../../models/subscription.model'
 import { SubscribeToEvent } from '../../../actions/subscription.actions'
+import { map } from 'rxjs/operators'
+
+// const { dialog } = require('electron').remote
 
 @Component({
   selector: 'app-scan-process',
@@ -41,6 +44,38 @@ export class ScanProcessComponent implements OnInit {
       }
     })
     
+  }
+
+  exportToCSV() {
+    let header: string[] = ["nie", "nie_expiry", "batch", "production_date", "expired_date", "serial_no"]
+  
+
+    let newArr: Product[] = []
+    let productArr: any
+
+    this.products$.subscribe(obj => {
+      newArr.push(obj)
+      productArr = newArr[0]
+    })
+
+    let raw: any[] = []
+
+    productArr.forEach(prod => {
+      let temp: string[] = []
+      temp.push(prod.nie)
+      temp.push(prod.nieExpiry)
+      temp.push(prod.batch)
+      temp.push(prod.productionDate)
+      temp.push(prod.expiryDate)
+      temp.push(prod.serialNo)
+      raw.push(temp)
+    });
+
+    raw.unshift(header)
+    console.log(raw)
+
+    this._electronService.ipcRenderer.invoke('export-scan', raw)
+      .then(dir => console.log(dir))
   }
 
 }

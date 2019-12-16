@@ -1,6 +1,7 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const path = require('path')
 const url = require('url')
+const csv = require('fast-csv')
 
 const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline');
@@ -13,7 +14,7 @@ let win
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 800,
+    width: 1000,
     height: 600,
     webPreferences: {
       nodeIntegration: true,
@@ -119,4 +120,19 @@ function connectPort(scanDevice) {
       win.webContents.send('qr-scanned', qrData)
 
   });
+
+  // Handle export scan csv
+  ipcMain.handle('export-scan', (event, args) => {
+    exportPath = dialog.showSaveDialogSync({title: 'Export CSV', defaultPath: 'export.csv'})
+    return csv.writeToPath(exportPath, args, {headers: true})
+      .on('error', err => {
+        console.log(err)
+        return false
+      })
+      .on('finish', () => {
+        console.log('done writing')
+        return true
+      })
+  })
+
 }
