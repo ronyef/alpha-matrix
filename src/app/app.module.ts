@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 import { NgxElectronModule } from 'ngx-electron'
 
@@ -17,6 +18,7 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin'
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin'
 import { ProductState } from './state/product.state';
 import { SubscriptionState } from './state/subscription.state';
+import { RandomCodeState } from './state/random-code.state';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { SubscriptionState } from './state/subscription.state';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
     ClarityModule,
     BrowserAnimationsModule,
     MainPageModule,
@@ -34,7 +38,8 @@ import { SubscriptionState } from './state/subscription.state';
     NgxsModule.forRoot([
       DeviceState,
       ProductState,
-      SubscriptionState
+      SubscriptionState,
+      RandomCodeState
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot()

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 
 import { PrinterRoutingModule } from './printer-routing.module';
 import { PrinterComponent } from './printer.component';
@@ -14,7 +15,9 @@ import { ClarityModule } from '@clr/angular';
   imports: [
     CommonModule,
     ClarityModule,
-    PrinterRoutingModule
+    PrinterRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class PrinterModule { }
