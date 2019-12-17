@@ -1,6 +1,6 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store'
 import { Product } from './../models/product.model'
-import { AddProduct } from './../actions/product.actions'
+import { AddProduct, ClearProduct } from './../actions/product.actions'
 
 export class ProductStateModel {
     products: Product[]
@@ -25,6 +25,14 @@ export class ProductState {
         const state = getState()
         patchState({
             products: [...state.products, payload]
+        })
+    }
+
+    @Action(ClearProduct)
+    clear(ctx: StateContext<ProductStateModel>) {
+        const state = ctx.getState()
+        ctx.patchState({
+            products: []
         })
     }
 }

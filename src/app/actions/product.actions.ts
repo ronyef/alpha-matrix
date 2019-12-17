@@ -5,3 +5,7 @@ export class AddProduct {
     
     constructor(public payload: Product) {}
 }
+
+export class ClearProduct {
+    static readonly type = '[SCANNER PROCESS] ClearProduct'
+}

@@ -15,7 +15,7 @@ function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
     width: 1000,
-    height: 600,
+    height: 640,
     webPreferences: {
       nodeIntegration: true,
       backgroundThrottling: false
@@ -121,18 +121,33 @@ function connectPort(scanDevice) {
 
   });
 
-  // Handle export scan csv
-  ipcMain.handle('export-scan', (event, args) => {
-    exportPath = dialog.showSaveDialogSync({title: 'Export CSV', defaultPath: 'export.csv'})
-    return csv.writeToPath(exportPath, args, {headers: true})
-      .on('error', err => {
-        console.log(err)
-        return false
-      })
-      .on('finish', () => {
-        console.log('done writing')
-        return true
-      })
-  })
-
 }
+
+// Handle export scan csv
+ipcMain.handle('export-scan', (event, args) => {
+  exportPath = dialog.showSaveDialogSync({title: 'Export CSV', defaultPath: 'export.csv'})
+  if (exportPath) {
+    csv.writeToPath(exportPath, args, {headers: true})
+    .on('error', err => {
+      console.log(err)
+    })
+    .on('finish', () => {
+      console.log('done writing')
+    })
+    return true
+  } else {
+    return false
+  }
+  
+})
+
+// Handle clear scanned products
+ipcMain.handle('clear-products', (event, args) => {
+  res = dialog.showMessageBoxSync({
+    type: 'question',
+    title: 'Confirmation',
+    buttons: ['Yes', 'No'],
+    message: 'Are you sure to clear data?'
+  })
+  return res
+})

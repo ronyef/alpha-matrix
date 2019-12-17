@@ -1,14 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ElectronService } from 'ngx-electron'
-import { Store, Select } from '@ngxs/store'
-import { AddProduct } from './../../../actions/product.actions'
+import { Store, Select, State } from '@ngxs/store'
+import { AddProduct, ClearProduct } from './../../../actions/product.actions'
 import { Product } from '../../../models/product.model'
 import { Observable, from } from 'rxjs'
 import { Subscription } from '../../../models/subscription.model'
 import { SubscribeToEvent } from '../../../actions/subscription.actions'
-import { map } from 'rxjs/operators'
+import { ProductState, ProductStateModel } from '../../../state/product.state'
 
-// const { dialog } = require('electron').remote
 
 @Component({
   selector: 'app-scan-process',
@@ -76,6 +75,16 @@ export class ScanProcessComponent implements OnInit {
 
     this._electronService.ipcRenderer.invoke('export-scan', raw)
       .then(dir => console.log(dir))
+  }
+
+  clearProducts() {
+    this._electronService.ipcRenderer.invoke('clear-products')
+    .then(response => {
+      console.log(response)
+      if (response == 0) {
+        this.store.dispatch(new ClearProduct())
+      }
+    })
   }
 
 }
