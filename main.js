@@ -123,6 +123,50 @@ function connectPort(scanDevice) {
 
 }
 
+//AGGREGATE SCANNER
+ipcMain.handle('connect-ag-scanner', async(event, device) => {
+
+  const scanner = new SerialPort(device, {baudRate: 115200})
+
+  scanner.on('error', function(err) {
+      console.log(err.message)
+  })
+
+  const parser = new Readline();
+  scanner.pipe(parser);
+
+  parser.on('data', (line) => {
+      // console.log(`> ${line}`)
+      console.log('NIE: ',getNie(line));
+      console.log('NIE Expiry: ',getNieExpiry(line));
+      console.log('Batch: ',getBatch(line));
+      console.log('Production Date: ',getProductionDate(line));
+      console.log('Expiry Date: ',getExpiryDate(line));
+      console.log('Serial No: ',getSerial(line));
+
+      const nie = getNie(line)
+      const nieExpiry = getNieExpiry(line)
+      const batch = getBatch(line)
+      const productionDate = getProductionDate(line)
+      const expiryDate = getExpiryDate(line)
+      const serialNo = getSerial(line)
+
+      const qrData = {
+          nie: nie,
+          nieExpiry: nieExpiry,
+          batch: batch,
+          productionDate: productionDate,
+          expiryDate: expiryDate,
+          serialNo: serialNo
+      }
+
+      win.webContents.send('ag-qr-scanned', qrData)
+
+  });
+
+  return true
+})
+
 // Handle export scan csv
 ipcMain.handle('export-scan', (event, args) => {
   exportPath = dialog.showSaveDialogSync({title: 'Export CSV', defaultPath: 'export.csv'})
@@ -183,4 +227,33 @@ ipcMain.handle('export-full-code', (even, args) => {
   } else {
     return false
   }
+})
+
+// Handle export aggregation csv
+ipcMain.handle('export-aggregation', (event, args) => {
+  exportPath = dialog.showSaveDialogSync({title: 'Export CSV', defaultPath: 'export.csv'})
+  if (exportPath) {
+    csv.writeToPath(exportPath, args, {headers: true})
+    .on('error', err => {
+      console.log(err)
+    })
+    .on('finish', () => {
+      console.log('done writing')
+    })
+    return true
+  } else {
+    return false
+  }
+  
+})
+
+// Handle clear aggregation products
+ipcMain.handle('clear-aggregations', (event, args) => {
+  res = dialog.showMessageBoxSync({
+    type: 'question',
+    title: 'Confirmation',
+    buttons: ['Yes', 'No'],
+    message: 'Are you sure to clear data?'
+  })
+  return res
 })

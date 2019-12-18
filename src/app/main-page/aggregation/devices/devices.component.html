@@ -1,1 +1,16 @@
-<p>devices works!</p>
+<img src="assets/images/scanner.png" alt="scanner" width="120">
+<p class="p2">Detected Devices:</p>
+<div *ngIf="devices$; else empty">
+    <ul class="list" *ngFor="let device of devices$ | async; let i = index">
+        <li>
+            <span>{{device.path}}&nbsp;&nbsp;</span>
+            <button class="btn btn-sm" *ngIf="device.isConnected==false || device.isConnected==undefined" (click)="connect(device.path)">Connect</button>
+            <span *ngIf="device.isConnected==true"><div class="connected">- Connected</div></span>
+        </li>
+    </ul>
+</div>
+<ng-template #empty>
+    <p>No device found</p>
+</ng-template>
+<br>
+<button class="btn btn-primary btn-sm" (click)="detect()">Detect</button>

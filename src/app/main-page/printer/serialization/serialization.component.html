@@ -9,9 +9,9 @@
         <clr-control-error>Please input number of products!</clr-control-error>
     </clr-input-container>
     <br>
-    <button class="btn btn-sm btn-success" type="button" (click)="generateSerials()">Generate</button>
-    <button class="btn btn-sm btn-primary" type="submit" >Export</button>
-    <button class="btn btn-sm" type="button" (click)="resetForm()">Reset</button>
+    <button class="btn btn-sm btn-success" type="button" (click)="generateSerials()" [disabled]="!codeForm.valid">Generate</button>
+    <button class="btn btn-sm btn-primary" type="submit" [disabled]="!codeForm.valid">Export</button>
+    <button class="btn btn-sm" type="button" (click)="resetForm()" [disabled]="!codeForm.valid">Reset</button>
 </form>
 <br>
 <div class="scroll">

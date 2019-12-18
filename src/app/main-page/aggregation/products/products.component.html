@@ -1,1 +1,55 @@
-<p>products works!</p>
+<h3>Scanned Products</h3>
+<div class="limit-height">
+    <clr-datagrid>
+        <clr-dg-column>
+            <ng-container *clrDgHideableColumn="{hidden: false}">
+                NIE
+            </ng-container>
+        </clr-dg-column>
+        <clr-dg-column>
+            <ng-container *clrDgHideableColumn="{hidden: false}">
+                NIE Expiry
+            </ng-container>
+        </clr-dg-column>
+        <clr-dg-column>
+            <ng-container *clrDgHideableColumn="{hidden: false}">
+                Batch No
+            </ng-container>
+        </clr-dg-column>
+        <clr-dg-column>
+            <ng-container *clrDgHideableColumn="{hidden: false}">
+                Prod Date
+            </ng-container>
+        </clr-dg-column>
+        <clr-dg-column>
+            <ng-container *clrDgHideableColumn="{hidden: false}">
+                Expired
+            </ng-container>
+        </clr-dg-column>
+        <clr-dg-column>
+            <ng-container *clrDgHideableColumn="{hidden: false}">
+                Serial No
+            </ng-container>
+        </clr-dg-column>
+        <clr-dg-row *clrDgItems="let aggregation of aggregations$ | async" [clrDgItem]="aggregation">
+            <clr-dg-cell>{{aggregation.nie}}</clr-dg-cell>
+            <clr-dg-cell>{{aggregation.nieExpiry}}</clr-dg-cell>
+            <clr-dg-cell>{{aggregation.batch}}</clr-dg-cell>
+            <clr-dg-cell>{{aggregation.productionDate}}</clr-dg-cell>
+            <clr-dg-cell>{{aggregation.expiryDate}}</clr-dg-cell>
+            <clr-dg-cell>{{aggregation.serialNo}}</clr-dg-cell>
+        </clr-dg-row>
+        <clr-dg-footer>
+            {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
+            of {{pagination.totalItems}} products
+            <clr-dg-pagination #pagination [clrDgPageSize]="currentPageSize"></clr-dg-pagination>
+        </clr-dg-footer>
+    </clr-datagrid>
+</div>
+<ng-template #empty>
+    <p>No product scanned</p>
+</ng-template>
+<br>
+<button class="btn btn-primary btn-sm" (click)="exportToCSV()" [disabled]="aggregations$ | async">Export Data</button>
+<button class="btn btn-danger btn-sm" (click)="clearProducts()" [disabled]="aggregations$ | async">Clear Data</button>
+

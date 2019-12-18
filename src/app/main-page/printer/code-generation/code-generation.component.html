@@ -32,8 +32,8 @@
         <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
     </clr-input-container>
     <br>
-    <button class="btn btn-sm btn-primary" type="submit" >Export</button>
-    <button class="btn btn-sm" type="button" >Reset</button>
+    <button class="btn btn-sm btn-primary" type="submit" [disabled]="!codeForm.valid">Export</button>
+    <button class="btn btn-sm" type="button" [disabled]="!codeForm.valid" (click)="resetForm()">Reset</button>
 </form>
 
 

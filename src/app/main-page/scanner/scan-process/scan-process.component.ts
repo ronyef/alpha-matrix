@@ -6,7 +6,6 @@ import { Product } from '../../../models/product.model'
 import { Observable, from } from 'rxjs'
 import { Subscription } from '../../../models/subscription.model'
 import { SubscribeToEvent } from '../../../actions/subscription.actions'
-import { ProductState, ProductStateModel } from '../../../state/product.state'
 
 
 @Component({
@@ -32,6 +31,7 @@ export class ScanProcessComponent implements OnInit {
   }
 
   ngOnInit() {
+    
     this.subscription$.subscribe((sub) => {
       if (sub.qrScanned == false) {
         this._electronService.ipcRenderer.on('qr-scanned' , (event , data) => { 

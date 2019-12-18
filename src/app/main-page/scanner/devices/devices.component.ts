@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ElectronService } from 'ngx-electron'
-import { DevicesStoreService } from 'src/app/services/devices-store.service';
 import { Observable } from 'rxjs'
 import { Store } from '@ngxs/store'
 import { DetectDevice, ConnectDevice } from 'src/app/actions/device.actions';
