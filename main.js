@@ -15,7 +15,7 @@ function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
     width: 1000,
-    height: 640,
+    height: 700,
     webPreferences: {
       nodeIntegration: true,
       backgroundThrottling: false
@@ -150,4 +150,37 @@ ipcMain.handle('clear-products', (event, args) => {
     message: 'Are you sure to clear data?'
   })
   return res
+})
+
+// Handle export random serials
+ipcMain.handle('export-serials', (event, args) => {
+  exportPath = dialog.showSaveDialogSync({ title: 'Export Serials', defaultPath: 'serials.csv'})
+  if (exportPath) {
+    csv.writeToPath(exportPath, args, {headers: true})
+    .on('error', err => {
+      console.log(err)
+    })
+    .on('finish', () => {
+      console.log('done writing')
+    })
+    return true
+  } else {
+    return false
+  }
+})
+
+ipcMain.handle('export-full-code', (even, args) => {
+  exportPath = dialog.showSaveDialogSync({ title: 'Export Raw Code', defaultPath: 'rawCodes.csv'})
+  if (exportPath) {
+    csv.writeToPath(exportPath, args, {headers: true})
+    .on('error', err => {
+      console.log(err)
+    })
+    .on('finish', () => {
+      console.log('done writing')
+    })
+    return true
+  } else {
+    return false
+  }
 })

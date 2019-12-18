@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormControl, Validators} from "@angular/forms";
+import { ElectronService } from 'ngx-electron'
 import { RandomCode } from '../../../models/random-code.model'
 import { Store } from '@ngxs/store'
 import { AddRandomCode, ClearRandomCode } from '../../../actions/random-code.actions'
@@ -16,7 +17,7 @@ export class SerializationComponent implements OnInit {
 
   serials$: Observable<RandomCode>
 
-  constructor(private store: Store) { 
+  constructor(private store: Store, private electronService: ElectronService) { 
     this.serials$ = this.store.select(state => state.randomCodes.randomCodes)
   }
 
@@ -29,6 +30,7 @@ export class SerializationComponent implements OnInit {
 
   resetForm() {
     this.codeForm.reset()
+    this.store.dispatch(new ClearRandomCode)
   }
 
   generateSerials() {
@@ -47,7 +49,16 @@ export class SerializationComponent implements OnInit {
     if (this.codeForm.invalid) {
       this.codeForm.markAsTouched
     } else {
-      console.log(this.codeForm.get('num').value)
+      let dataArr: any[] = []
+      this.serials$.subscribe(obj => {
+        let tempArr: any[] = []
+        // console.log(obj[3])
+        tempArr.push(obj)
+        // console.log(tempArr)
+        dataArr.push(tempArr[0])
+      })
+      console.log(dataArr)
+      this.electronService.ipcRenderer.invoke('export-serials', dataArr)
     }
     
   }

@@ -1,33 +1,33 @@
 <h3>Generate QR Code</h3>
 <p>Fill form below and state number of products. Codes with random serial numbers will be generated and exported for printing process.</p>
-<form clrForm>
+<form clrForm [formGroup]="codeForm" (ngSubmit)="submit()"> 
     <clr-input-container>
         <label class="clr-col-12 clr-col-md-4">NIE</label>
-        <input class="clr-col-12 clr-col-md-8" clrInput type="text" name="nie" required />
+        <input class="clr-col-12 clr-col-md-8" clrInput type="text" formControlName="nie" required />
         <!-- <clr-control-helper>Nomor Ijin Edar</clr-control-helper> -->
         <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
     </clr-input-container>
     <clr-date-container>
         <label class="clr-col-12 clr-col-md-4">NIE Expired Date</label>
-        <input class="clr-col-12 clr-col-md-8" type="date" clrDate name="nie_expired_date" >
+        <input class="clr-col-12 clr-col-md-8" type="date" clrDate formControlName="nie_expired_date" >
     </clr-date-container>
     <clr-input-container>
         <label class="clr-col-12 clr-col-md-4">Batch No</label>
-        <input class="clr-col-12 clr-col-md-8" clrInput type="text" name="batch" required />
+        <input class="clr-col-12 clr-col-md-8" clrInput type="text" formControlName="batch" required />
         <!-- <clr-control-helper>Helper text that shows while it is pristine and valid</clr-control-helper> -->
         <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
     </clr-input-container>
     <clr-date-container>
         <label class="clr-col-12 clr-col-md-4">Production Date</label>
-        <input class="clr-col-12 clr-col-md-8" type="date" clrDate name="prod_date" >
+        <input class="clr-col-12 clr-col-md-8" type="date" clrDate formControlName="prod_date" >
     </clr-date-container>
     <clr-date-container>
         <label class="clr-col-12 clr-col-md-4">Expired Date</label>
-        <input class="clr-col-12 clr-col-md-8" type="date" clrDate name="exp_date" >
+        <input class="clr-col-12 clr-col-md-8" type="date" clrDate formControlName="exp_date" >
     </clr-date-container>
     <clr-input-container>
         <label class="clr-col-12 clr-col-md-4">Number of Products</label>
-        <input class="clr-col-12 clr-col-md-8" clrInput type="text" placeholder="1000" name="prod_num" required />
+        <input class="clr-col-12 clr-col-md-8" clrInput type="text" placeholder="1000" formControlName="prod_num" required />
         <!-- <clr-control-helper>Nomor Ijin Edar</clr-control-helper> -->
         <clr-control-error>Error message that appears after focus is lost and control is invalid</clr-control-error>
     </clr-input-container>
