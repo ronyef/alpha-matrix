@@ -32,20 +32,26 @@ export class CodeGenerationComponent implements OnInit {
 
     for (let i = 0; i < this.codeForm.get('prod_num').value * 1; i++) {
       code = []
-      code.push(this.codeForm.get('nie').value)
-      code.push(this.codeForm.get('nie_expired_date').value)
-      code.push(this.codeForm.get('batch').value)
-      code.push(this.codeForm.get('prod_date').value)
-      code.push(this.codeForm.get('exp_date').value)
-      code.push(uuid())
+
+      code.push('(90)' + this.codeForm.get('nie').value)
+      code.push('(91)' + this.formatDate(this.codeForm.get('nie_expired_date').value))
+      code.push('(10)' + this.codeForm.get('batch').value)
+      code.push('(11)' + this.formatDate(this.codeForm.get('prod_date').value))
+      code.push('(17)' + this.formatDate(this.codeForm.get('exp_date').value))
+      code.push('(21)' + uuid())
       codes.push(code)
     }
 
-    codes.unshift(header)
+    // codes.unshift(header)
 
     this.electronService.ipcRenderer.invoke('export-full-code', codes)
     .then(res => console.log(res))
 
+  }
+
+  formatDate(rawDate: string): string {
+    let splittedDate = rawDate.split('/')
+    return splittedDate[2] + splittedDate[1] + splittedDate[0]
   }
 
   resetForm() {

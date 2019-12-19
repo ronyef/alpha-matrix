@@ -35,7 +35,7 @@ module.exports = {
     },
 
     getSerial: (code) => {
-        const re = /\(21\)\w+/;
+        const re = /\(21\).+/;
         const val = (code.match(re) || []).join('');
         return val.substr(4, val.length);
     }
