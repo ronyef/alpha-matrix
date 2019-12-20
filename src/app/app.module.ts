@@ -19,6 +19,7 @@ import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin'
 import { ProductState } from './state/product.state';
 import { SubscriptionState } from './state/subscription.state';
 import { RandomCodeState } from './state/random-code.state';
+import { AggregationState } from './state/aggregation.state';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { RandomCodeState } from './state/random-code.state';
     NgxsModule.forRoot([
       DeviceState,
       ProductState,
+      AggregationState,
       SubscriptionState,
       RandomCodeState
     ]),

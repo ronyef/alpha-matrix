@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron')
+const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron')
 const path = require('path')
 const url = require('url')
 const csv = require('fast-csv')
@@ -63,6 +63,7 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
+Menu.setApplicationMenu(null)
 
 // const ipc = require('./ipc/ipc')
 
@@ -126,14 +127,14 @@ function connectPort(scanDevice) {
 //AGGREGATE SCANNER
 ipcMain.handle('connect-ag-scanner', async(event, device) => {
 
-  const scanner = new SerialPort(device, {baudRate: 115200})
+  const agScanner = new SerialPort(device, {baudRate: 115200})
 
-  scanner.on('error', function(err) {
+  agScanner.on('error', function(err) {
       console.log(err.message)
   })
 
   const parser = new Readline();
-  scanner.pipe(parser);
+  agScanner.pipe(parser);
 
   parser.on('data', (line) => {
       // console.log(`> ${line}`)
@@ -173,13 +174,17 @@ ipcMain.handle('export-scan', (event, args) => {
   if (exportPath) {
     csv.writeToPath(exportPath, args, {headers: true})
     .on('error', err => {
+      alertMessage('error', err)
       console.log(err)
     })
     .on('finish', () => {
+      msg = 'CSV successfully exported to' + exportPath
+      alertMessage('info', msg)
       console.log('done writing')
     })
     return true
   } else {
+    alertMessage('info', 'Export canceled!')
     return false
   }
   
@@ -200,15 +205,19 @@ ipcMain.handle('clear-products', (event, args) => {
 ipcMain.handle('export-serials', (event, args) => {
   exportPath = dialog.showSaveDialogSync({ title: 'Export Serials', defaultPath: 'serials.csv'})
   if (exportPath) {
-    csv.writeToPath(exportPath, args, {headers: true})
+    csv.writeToPath(exportPath, args, {headers: false})
     .on('error', err => {
+      alertMessage('error', err)
       console.log(err)
     })
     .on('finish', () => {
+      msg = 'CSV successfully exported to' + exportPath
+      alertMessage('info', msg)
       console.log('done writing')
     })
     return true
   } else {
+    alertMessage('info', 'Export canceled!')
     return false
   }
 })
@@ -216,18 +225,27 @@ ipcMain.handle('export-serials', (event, args) => {
 ipcMain.handle('export-full-code', (even, args) => {
   exportPath = dialog.showSaveDialogSync({ title: 'Export Raw Code', defaultPath: 'rawCodes.csv'})
   if (exportPath) {
-    csv.writeToPath(exportPath, args, {headers: true})
+    csv.writeToPath(exportPath, args, {headers: false})
     .on('error', err => {
+      alertMessage('error', err)
       console.log(err)
     })
     .on('finish', () => {
+      msg = 'CSV successfully exported to' + exportPath
+      status = 'info'
+      alertMessage(status, msg)
       console.log('done writing')
     })
     return true
   } else {
+    alertMessage('info', 'Export canceled!')
     return false
   }
 })
+
+function alertMessage(status, message) {
+  dialog.showMessageBox({type: status, message: message, title: 'Export Status'})
+}
 
 // Handle export aggregation csv
 ipcMain.handle('export-aggregation', (event, args) => {
@@ -235,13 +253,16 @@ ipcMain.handle('export-aggregation', (event, args) => {
   if (exportPath) {
     csv.writeToPath(exportPath, args, {headers: true})
     .on('error', err => {
+      alertMessage('error', err)
       console.log(err)
     })
     .on('finish', () => {
+      alertMessage('info', 'CSV successfully exported to' + exportPath)
       console.log('done writing')
     })
     return true
   } else {
+    alertMessage('info', 'Export cancelled!')
     return false
   }
   

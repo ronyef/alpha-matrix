@@ -31,5 +31,13 @@ export class SubscriptionState {
             subscription: {...state.subscription, qrScanned: payload}
         })
     }
+
+    @Action(SubscribeToEvent.ToAggregate)
+    subscribeToAggregate(ctx: StateContext<SubscriptionStateModel>, {payload}: SubscribeToEvent.ToAggregate) {
+        const state = ctx.getState()
+        ctx.patchState({
+            subscription: {...state.subscription, qrAggregated: payload}
+        })
+    }
     
 }

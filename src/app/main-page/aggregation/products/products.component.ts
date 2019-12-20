@@ -31,13 +31,13 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     this.subscription$.subscribe((sub) => {
-      if (sub.qrScanned == false) {
+      if (sub.qrAggregated == false) {
         this._electronService.ipcRenderer.on('ag-qr-scanned' , (event , data) => { 
           this.store.dispatch(new AddAggregation(data))
         })
 
-        this.store.dispatch(new SubscribeToEvent.ToScan(true))
-        console.log('Subscribe to qr-scanned event')
+        this.store.dispatch(new SubscribeToEvent.ToAggregate(true))
+        console.log('Subscribe to ag-qr-scanned event')
       }
     })
   }
