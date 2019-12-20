@@ -278,3 +278,6 @@ ipcMain.handle('clear-aggregations', (event, args) => {
   })
   return res
 })
+
+
+
