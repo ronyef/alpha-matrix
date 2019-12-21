@@ -88,6 +88,7 @@ function connectPort(scanDevice) {
 
   scanner.on('error', function(err) {
       console.log(err.message)
+      alertMessage('error', err.message)
   })
 
   const parser = new Readline();
@@ -119,6 +120,14 @@ function connectPort(scanDevice) {
       }
 
       win.webContents.send('qr-scanned', qrData)
+        
+      if (plc) {
+        plc.write('1')
+        console.log('rejector sent!')
+      } else {
+        console.log(plc)
+        alertMessage('error', 'Rejector not connected!')
+      }
 
   });
 
@@ -166,6 +175,23 @@ ipcMain.handle('connect-ag-scanner', async(event, device) => {
   });
 
   return true
+})
+
+var plc
+
+// Connect Rejector
+ipcMain.handle('connect-rejector', async(event, device) => {
+  const rejector = new SerialPort(device, {baudRate: 115200})
+
+  rejector.on('error', function(err) {
+      console.log(err.message)
+      alertMessage('Error', err.message)
+  })
+
+  // console.log(rejector)
+  plc = rejector
+  return true
+
 })
 
 // Handle export scan csv

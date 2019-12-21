@@ -12,7 +12,8 @@ export class SubscriptionStateModel {
     defaults: {
         subscription: {
             qrScanned: false,
-            qrAggregated: false
+            qrAggregated: false,
+            rejector: false
         }
     }
 })
