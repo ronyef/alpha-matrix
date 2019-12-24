@@ -20,6 +20,7 @@ import { ProductState } from './state/product.state';
 import { SubscriptionState } from './state/subscription.state';
 import { RandomCodeState } from './state/random-code.state';
 import { AggregationState } from './state/aggregation.state';
+import { RejectState } from './state/reject.state';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { AggregationState } from './state/aggregation.state';
       ProductState,
       AggregationState,
       SubscriptionState,
-      RandomCodeState
+      RandomCodeState,
+      RejectState
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot()

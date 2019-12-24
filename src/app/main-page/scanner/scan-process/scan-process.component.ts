@@ -6,6 +6,8 @@ import { Product } from '../../../models/product.model'
 import { Observable, from } from 'rxjs'
 import { Subscription } from '../../../models/subscription.model'
 import { SubscribeToEvent } from '../../../actions/subscription.actions'
+import { Reject } from '../../../models/reject.model'
+import { ResetReject, AddReject } from 'src/app/actions/rejector.actions';
 
 
 @Component({
@@ -19,6 +21,9 @@ export class ScanProcessComponent implements OnInit {
 
   subscription$: Observable<Subscription>
 
+  reject$: Observable<Reject>
+  reject: Reject
+
   currentPageSize: number
 
   constructor(private _electronService: ElectronService, private store: Store) { 
@@ -27,6 +32,7 @@ export class ScanProcessComponent implements OnInit {
 
     this.subscription$ = this.store.select(state => state.subscription.subscription)
     this.products$ = this.store.select(state => state.products.products)
+    this.reject$ = this.store.select(state => state.reject.reject)
 
   }
 
@@ -39,8 +45,19 @@ export class ScanProcessComponent implements OnInit {
         })
 
         this.store.dispatch(new SubscribeToEvent.ToScan(true))
-        console.log('Subscribe to qr-scanned event')
       }
+
+      if (sub.rejector == false) {
+        this._electronService.ipcRenderer.on('reject', (event, data) => {
+          this.store.dispatch(new AddReject())
+        })
+
+        this.store.dispatch(new SubscribeToEvent.ToRejector(true))
+      }
+    })
+
+    this.reject$.subscribe((rej) => {
+      this.reject = rej
     })
     
   }
@@ -83,6 +100,7 @@ export class ScanProcessComponent implements OnInit {
       console.log(response)
       if (response == 0) {
         this.store.dispatch(new ClearProduct())
+        this.store.dispatch(new ResetReject())
       }
     })
   }

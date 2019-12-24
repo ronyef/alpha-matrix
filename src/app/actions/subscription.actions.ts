@@ -12,4 +12,10 @@ export namespace SubscribeToEvent {
 
         constructor(public payload: boolean) {}
     }
+
+    export class ToRejector {
+        static readonly type = '[SCANNER PROCESS] SubscribeToRejector'
+
+        constructor(public payload: boolean) {}
+    }
 }

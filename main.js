@@ -188,6 +188,14 @@ ipcMain.handle('connect-rejector', async(event, device) => {
       alertMessage('Error', err.message)
   })
 
+  const parser = new Readline();
+  rejector.pipe(parser);
+
+  parser.on('data', (line) => {
+    console.log(line)
+    this.ipcMain.send('reject')
+  })
+
   // console.log(rejector)
   plc = rejector
   return true

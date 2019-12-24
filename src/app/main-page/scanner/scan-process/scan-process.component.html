@@ -49,7 +49,7 @@
 <ng-template #empty>
     <p>No product scanned</p>
 </ng-template>
-<h6>Reject Counter: <span class="reject">0</span></h6>
+<h6>Reject Counter: <span class="reject">{{reject.count}}</span></h6>
 <br>
 <button class="btn btn-primary btn-sm" (click)="exportToCSV()">Export Data</button>
 <button class="btn btn-danger btn-sm" (click)="clearProducts()">Clear Data</button>
