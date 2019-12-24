@@ -37,6 +37,10 @@ export class ScanProcessComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.reject$.subscribe((rej) => {
+      this.reject = rej
+    })
     
     this.subscription$.subscribe((sub) => {
       if (sub.qrScanned == false) {
@@ -47,17 +51,15 @@ export class ScanProcessComponent implements OnInit {
         this.store.dispatch(new SubscribeToEvent.ToScan(true))
       }
 
-      if (sub.rejector == false) {
+      else if (sub.rejector == false) {
+
         this._electronService.ipcRenderer.on('reject', (event, data) => {
           this.store.dispatch(new AddReject())
         })
 
         this.store.dispatch(new SubscribeToEvent.ToRejector(true))
-      }
-    })
 
-    this.reject$.subscribe((rej) => {
-      this.reject = rej
+      }
     })
     
   }

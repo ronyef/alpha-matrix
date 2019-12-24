@@ -40,5 +40,13 @@ export class SubscriptionState {
             subscription: {...state.subscription, qrAggregated: payload}
         })
     }
+
+    @Action(SubscribeToEvent.ToRejector)
+    subscribeToRejector(ctx: StateContext<SubscriptionStateModel>, {payload}: SubscribeToEvent.ToRejector) {
+        const state = ctx.getState()
+        ctx.patchState({
+            subscription: {...state.subscription, rejector: payload}
+        })
+    }
     
 }

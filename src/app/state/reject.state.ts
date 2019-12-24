@@ -27,7 +27,7 @@ export class RejectState {
         const state = ctx.getState()
 
         ctx.patchState({
-            reject: {...state.reject, count: state.reject.count + 1}
+            reject: { ...state.reject, count: state.reject.count + 1}
         })
     }
 

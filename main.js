@@ -193,7 +193,7 @@ ipcMain.handle('connect-rejector', async(event, device) => {
 
   parser.on('data', (line) => {
     console.log(line)
-    this.ipcMain.send('reject')
+    win.webContents.send('reject')
   })
 
   // console.log(rejector)
